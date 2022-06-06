@@ -1,0 +1,9 @@
+{
+    "name": "antonio/pet-php-frameworkless",
+    "description": "Basic php froject without framework",
+    "type": "project",
+    "license": "propietary",
+    "require": {
+        "symfony/dotenv": "^5.4"
+    }
+}
