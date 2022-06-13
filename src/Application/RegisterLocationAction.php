@@ -4,6 +4,9 @@ namespace Src\Aplication;
 
 use Src\Domain\Location;
 use Src\Domain\LocationRepositoryInterface;
+use Src\Domain\MissingDeviceUuidException;
+use Src\Domain\MissingLatException;
+use Src\Domain\MissingLonException;
 
 final class RegisterLocation {
     private LocationRepositoryInterface $locationRepository;
