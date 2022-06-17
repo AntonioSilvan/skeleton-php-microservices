@@ -3,6 +3,9 @@
     "description": "Basic php froject without framework",
     "type": "project",
     "license": "propietary",
+    "scripts": {
+        "run-tests": "./vendor/bin/phpunit --bootstrap ./src/Tests/bootstrap.php ./src/Tests"
+    },
     "require": {
         "symfony/dotenv": "^5.4",
         "phpunit/phpunit": "^9.5"
