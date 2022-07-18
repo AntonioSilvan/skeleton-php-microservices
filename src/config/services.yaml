@@ -1,0 +1,15 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: true
+
+  PetFoundation\Controllers\:
+    resource: '../../src/Controllers'
+    tags: [ 'controller.service_arguments' ]
+
+  PetFoundation\:
+    resource: '../../src/*'
+    exclude:
+      - '../../src/routes'
+      - '../../src/Http/Kernel.php'

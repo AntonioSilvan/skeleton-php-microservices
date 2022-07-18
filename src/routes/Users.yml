@@ -1,0 +1,3 @@
+users:
+  path: /users
+  controller: 'PetFoundation\Controllers\TestController::test'

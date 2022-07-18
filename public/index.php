@@ -1,44 +1,33 @@
 <?php
 declare(strict_types = 1);
+require(__DIR__ . '/../bootstrap.php');
 
-use DI\ContainerBuilder;
-use PetFoundation\HelloWorld;
-use FastRoute\RouteCollector;
-use Middlewares\FastRoute;
-use Middlewares\RequestHandler;
-use Narrowspark\HttpEmitter\SapiEmitter;
-use Relay\Relay;
-use Laminas\Diactoros\Response;
-use Laminas\Diactoros\ServerRequestFactory;
-use function DI\create;
-use function DI\get;
-use function FastRoute\simpleDispatcher;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
+use PetFoundation\Http\Kernel;
 
-require_once dirname(__DIR__) . '/vendor/autoload.php';
+$container = new ContainerBuilder();
+$loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../src/config'));
+$loader->load('services.yaml');
+$container->compile();
 
-$containerBuilder = new ContainerBuilder();
-$containerBuilder->useAutowiring(false);
-$containerBuilder->useAnnotations(false);
-$containerBuilder->addDefinitions(
-    [
-        HelloWorld::class => create(HelloWorld::class)->constructor(get('Foo'), get('Response')),
-        'Foo' => 'bar',
-        'Response' => function() {
-            return new Response();
-        }
-    ]
-);
-$container = $containerBuilder->build();
+/*
+|----------------------------------------
+| Se inicia el Kernel
+|----------------------------------------
+| Se inicia el kernel donde se configura
+| el comportamiento de las rutas y el
+| container de la iyeccion de dependencias
+*/
+try{
+    $request = Request::createFromGlobals();
+    $kernel = Kernel::getInstance();
+    $response = $kernel->handle($request);
+    $response->send();
 
-$routes = simpleDispatcher(function(RouteCollector $r) {
-    $r->get('/hello', HelloWorld::class);
-});
-
-$middlewareQueue[] = new FastRoute($routes);
-$middlewareQueue[] = new RequestHandler($container);
-
-$requestHandler = new Relay($middlewareQueue);
-$response = $requestHandler->handle(ServerRequestFactory::fromGlobals());
-
-$emmiter = new SapiEmitter();
-$requestHandler->handle(ServerRequestFactory::fromGlobals());
+} catch (ResourceNotFoundException $e) {
+    echo $e->getMessage();
+}
