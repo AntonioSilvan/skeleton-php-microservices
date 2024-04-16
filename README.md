@@ -1,2 +1,2 @@
-# pet-php-frameworkless
-Red social para publicar mascotas perdidas y mas.
+# skeleton-php-microservices
+Skeleton for a tiny app in php only for microservices symfony based.
